@@ -12,42 +12,26 @@ object Dependencies {
     val persistence           = "com.typesafe.akka"      %% "akka-persistence-experimental" % version intransitive()
     val persistence_cassandra = "com.github.krasserm"    %% "akka-persistence-cassandra"    % "0.3.7" intransitive()
 
-    object streams {
-      val version = "1.0-RC1"
-
-      val core       = "com.typesafe.akka" %% "akka-stream-experimental"          % version
-      val http       = "com.typesafe.akka" %% "akka-http-experimental"            % version
-      val http_core  = "com.typesafe.akka" %% "akka-http-core-experimental"       % version
-      val spray_json = "com.typesafe.akka" %% "akka-http-spray-json-experimental" % version
-      //val testkit    = "com.typesafe.akka" %% "akka-http-testkit-experimental"    % version
-    }
-
     val leveldb               = "org.iq80.leveldb"        % "leveldb"                       % "0.7"
 
     val testkit               = "com.typesafe.akka"      %% "akka-testkit"                  % version
   }
 
-/*
   object spray {
     val version = "1.3.3"
 
-    val httpx   = "io.spray" %% "spray-httpx"              % version
-    val can     = "io.spray" %% "spray-can"                % version
-    val routing = "io.spray" %% "spray-routing-shapeless2" % version
-    val client  = "io.spray" %% "spray-client"             % version
+    val can     = "io.spray" %% "spray-can"                    % version
+    val routing = "io.spray" %% "spray-routing-shapeless2"     % version
+    val client  = "io.spray" %% "spray-client"                 % version
+    val ws      = "com.wandoulabs.akka" %%  "spray-websocket"  % "0.1.4"
+    val json    = "io.spray"            %%  "spray-json"       % "1.3.1"
 
     val testkit = ("io.spray" %% "spray-testkit"            % version)
       .exclude("org.scalamacros", "quasiquotes_2.10.3")
   }
-*/
 
   object scalaz {
     val core = "org.scalaz" %% "scalaz-core" % "7.1.1"
-  }
-
-  object json4s {
-    val native  = "org.json4s" %% "json4s-native" % "3.2.11"
-    val jackson = "org.json4s" %% "json4s-jackson" % "3.2.11"
   }
 
   object slf4j {

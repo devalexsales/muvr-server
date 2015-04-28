@@ -14,6 +14,11 @@ libraryDependencies ++= Seq(
   akka.leveldb,
   // Codec
   scalaz.core,
+  // Spray
+  spray.routing,
+  spray.can,
+  spray.json,
+  spray.ws,
   // Apple push notifications
   apns,
   slf4j.slf4j_simple,

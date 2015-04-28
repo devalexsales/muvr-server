@@ -10,8 +10,9 @@ libraryDependencies ++= Seq(
   akka.cluster,
   akka.contrib,
   akka.persistence,
-  akka.streams.core,
   scalaz.core,
+  spray.routing,
+  spray.json,
   // Apple push notifications
   apns,
   slf4j.slf4j_simple,
