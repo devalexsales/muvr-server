@@ -83,6 +83,13 @@ trait CommonMarshallers extends MarshallingDirectives with MetaMarshallers {
     override def apply(value: Unit, ctx: ToResponseMarshallingContext): Unit = ()
   }
 
+  implicit object UserIdFormat extends RootJsonFormat[UserId] {
+    override def write(obj: UserId): JsValue = JsString(obj.toString)
+    override def read(json: JsValue): UserId = json match {
+      case JsString(x) ⇒ UserId(x)
+    }
+  }
+
 //  case object UUIDSerialiser extends CustomSerializer[UUID](format => (
 //    {
 //      case JString(s) => UUID.fromString(s)

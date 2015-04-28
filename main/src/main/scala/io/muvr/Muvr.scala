@@ -49,7 +49,6 @@ trait Muvr {
       ConfigFactory.parseString(
         s"""
            |akka.remote.netty.tcp.port=$port
-           |akka.remote.netty.tcp.hostname=""
          """.stripMargin).
       withFallback(config)
 

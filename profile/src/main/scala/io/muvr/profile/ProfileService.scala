@@ -3,7 +3,7 @@ package io.muvr.profile
 import java.util.UUID
 
 import akka.actor.ActorRef
-import io.muvr.{CommonPathDirectives, CommonMarshallers}
+import io.muvr.{UserId, CommonPathDirectives, CommonMarshallers}
 import io.muvr.notification.NotificationProtocol.{AndroidDevice, IOSDevice}
 import io.muvr.profile.UserProfileProcessor._
 import io.muvr.profile.UserProfileProtocol._
@@ -30,12 +30,12 @@ private[profile] object ProfileService extends Directives with SprayJsonSupport 
     path("user") {
       post {
         handleWith { register: UserRegister ⇒
-          (userProfileProcessor ? register).mapRight[UUID]
+          (userProfileProcessor ? register).mapRight[UserId]
         }
       } ~
       put {
         handleWith { login: UserLogin ⇒
-          (userProfileProcessor ? login).mapRight[UUID]
+          (userProfileProcessor ? login).mapRight[UserId]
         }
       }
     } ~
