@@ -38,6 +38,15 @@ object CommonMarshallers {
   /** Some */
   case class ResponseSome[A](value: A) extends ResponseOption[A]
 
+  /**
+   * Pairs together the unmarshalled value and the entity that produced the ``unmarshalled``
+   *
+   * @param unmarshalled the unmarshalled value
+   * @param entity the entity that produced ``unmarshalled``
+   * @tparam A the type of A
+   */
+  case class UnmarshalledAndEntity[A](unmarshalled: A, entity: HttpEntity)
+
 }
 
 trait CommonMarshallers extends MarshallingDirectives with MetaMarshallers {
@@ -81,6 +90,17 @@ trait CommonMarshallers extends MarshallingDirectives with MetaMarshallers {
       override def apply(value: ResponseOption[A], ctx: ToResponseMarshallingContext): Unit = value match {
         case ResponseNone    ⇒ ctx.marshalTo(HttpResponse(StatusCodes.OK, entity = HttpEntity(contentType = ContentTypes.`application/json`, string = "{}")))
         case ResponseSome(a) ⇒ m.apply(a, ctx)
+      }
+    }
+  }
+
+  implicit def unmarshalledAndEntityFRU[A : FromRequestUnmarshaller]: FromRequestUnmarshaller[UnmarshalledAndEntity[A]] = {
+    val um = implicitly[FromRequestUnmarshaller[A]]
+
+    new FromRequestUnmarshaller[UnmarshalledAndEntity[A]] {
+      override def apply(request: HttpRequest): Deserialized[UnmarshalledAndEntity[A]] = um.apply(request) match {
+        case Right(a) ⇒ Right(UnmarshalledAndEntity(a, request.entity))
+        case Left(l) ⇒ Left(l)
       }
     }
   }

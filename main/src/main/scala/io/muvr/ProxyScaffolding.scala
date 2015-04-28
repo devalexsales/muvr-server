@@ -19,7 +19,7 @@ object ProxyScaffolding {
     private val pipeline = sendReceive(transport)
 
     override def receive: Receive = {
-      case x: String ⇒ pipeline(Post("http://muvr-scaffolding.herokuapp.com/exercise/123/444", x))
+      case x: String ⇒ pipeline(Post("http://muvr-scaffolding.herokuapp.com/exercise/123/444/resistance", x))
     }
   }
 

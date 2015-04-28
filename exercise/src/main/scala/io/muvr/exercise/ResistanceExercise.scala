@@ -1,5 +1,7 @@
 package io.muvr.exercise
 
+import spray.json.JsValue
+
 /**
  * Resistance exercise models a typical exercise a user performs against some weight.
  * At the very least, an RE holds some language-independent identifier of the exercise
@@ -13,9 +15,9 @@ package io.muvr.exercise
  * @param weight the weight being used
  * @param intensity the intensity
  */
-class ResistanceExercise(exercise: String, confidence: Double,
-                repetitions: Option[Int], weight: Option[Double],
-                intensity: Option[Double])
+case class ResistanceExercise(exercise: String, confidence: Double,
+                              repetitions: Option[Int], weight: Option[Double],
+                              intensity: Option[Double])
 
 /**
  * Exercise set contains several "sets" of exercise. In the simplest case,
@@ -34,7 +36,7 @@ class ResistanceExercise(exercise: String, confidence: Double,
  *
  * @param sets the sets
  */
-class ResistanceExerciseSet(sets: List[ResistanceExercise])
+case class ResistanceExerciseSet(sets: List[ResistanceExercise])
 
 /**
  * Resistance exercise set example that the app submits to provide positive or negative
@@ -47,6 +49,6 @@ class ResistanceExerciseSet(sets: List[ResistanceExercise])
  * @param correct the correct classification
  * @param fusedSensorData the exported data used for the classification
  */
-class ResistanceExerciseSetExample(classified: List[ResistanceExerciseSet],
-                                   correct: Option[ResistanceExerciseSet],
-                                   fusedSensorData: String)
+case class ResistanceExerciseSetExample(classified: List[ResistanceExerciseSet],
+                                        correct: Option[ResistanceExerciseSet],
+                                        fusedSensorData: JsValue)

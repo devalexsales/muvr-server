@@ -1,6 +1,6 @@
 package io.muvr.exercise
 
-import java.util.{Date, UUID}
+import java.util.Date
 
 
 /**
@@ -24,5 +24,5 @@ case class SessionProperties(startDate: Date,
    * The duration between sets
    */
   lazy val restDuration: FiniteDuration = (1.0 / intendedIntensity * brutalRest).seconds
-
+  
 }
