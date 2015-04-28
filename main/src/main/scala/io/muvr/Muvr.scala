@@ -45,7 +45,15 @@ trait Muvr {
    */
   final def actorSystemStartUp(port: Int, restPort: Int): Unit = {
     // Create an Akka system
-    implicit val system = ActorSystem("Muvr", ConfigFactory.parseString(s"akka.remote.netty.tcp.port=$port").withFallback(config))
+    val finalConfig =
+      ConfigFactory.parseString(
+        s"""
+           |akka.remote.netty.tcp.port=$port
+           |akka.remote.netty.tcp.hostname=""
+         """.stripMargin).
+      withFallback(config)
+
+    implicit val system = ActorSystem("Muvr", finalConfig)
     import system.dispatcher
 
     val transport = IO(UHttp)
