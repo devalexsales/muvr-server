@@ -15,12 +15,11 @@ object Dependencies {
     object streams {
       val version = "1.0-RC1"
 
-      val core      = "com.typesafe.akka" %% "akka-stream-experimental"         % version
-      val http      = "com.typesafe.akka" %% "akka-http-experimental"           % version
-      val http_core = "com.typesafe.akka" %% "akka-http-core-experimental"      % version
-
-      // FIXME: currently this is an empty dependency - as soon as this situation changes, we need to ensure manually added files under `akka.stream.testkit.*` are deleted!
-      val testkit   = "com.typesafe.akka" %% "akka-stream-testkit-experimental" % version
+      val core       = "com.typesafe.akka" %% "akka-stream-experimental"          % version
+      val http       = "com.typesafe.akka" %% "akka-http-experimental"            % version
+      val http_core  = "com.typesafe.akka" %% "akka-http-core-experimental"       % version
+      val spray_json = "com.typesafe.akka" %% "akka-http-spray-json-experimental" % version
+      //val testkit    = "com.typesafe.akka" %% "akka-http-testkit-experimental"    % version
     }
 
     val leveldb               = "org.iq80.leveldb"        % "leveldb"                       % "0.7"
@@ -28,6 +27,7 @@ object Dependencies {
     val testkit               = "com.typesafe.akka"      %% "akka-testkit"                  % version
   }
 
+/*
   object spray {
     val version = "1.3.3"
 
@@ -39,6 +39,7 @@ object Dependencies {
     val testkit = ("io.spray" %% "spray-testkit"            % version)
       .exclude("org.scalamacros", "quasiquotes_2.10.3")
   }
+*/
 
   object scalaz {
     val core = "org.scalaz" %% "scalaz-core" % "7.1.1"

@@ -12,10 +12,6 @@ libraryDependencies ++= Seq(
   akka.persistence,
   akka.persistence_cassandra,
   akka.leveldb,
-  // For REST API
-  spray.httpx,
-  spray.can,
-  spray.routing,
   // Codec
   scalaz.core,
   // Apple push notifications
@@ -24,8 +20,7 @@ libraryDependencies ++= Seq(
   // Testing
   scalatest % "test",
   scalacheck % "test",
-  akka.testkit % "test",
-  spray.testkit % "test"
+  akka.testkit % "test"
 )
 /*
 import DockerKeys._

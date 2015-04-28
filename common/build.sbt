@@ -11,10 +11,5 @@ libraryDependencies ++= Seq(
   akka.contrib,
   akka.persistence,
   scalaz.core,
-  cassandra_driver,
-  // Spray + Json
-  spray.routing,
-  spray.can,
-  // Scodec
-  json4s.native
+  cassandra_driver
 )
