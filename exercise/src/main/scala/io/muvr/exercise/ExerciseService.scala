@@ -4,7 +4,7 @@ import akka.actor.ActorRef
 import spray.http.HttpEntity
 import spray.routing.Directives
 
-object ExerciseService extends Directives {
+private[exercise] object ExerciseService extends Directives {
 
   def route(scaffolding: ActorRef) =
     path("exercise" / Segment / Segment) { (x, y) ⇒

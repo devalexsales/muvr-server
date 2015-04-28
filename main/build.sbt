@@ -17,6 +17,7 @@ libraryDependencies ++= Seq(
   // Spray
   spray.routing,
   spray.can,
+  spray.client,
   spray.json,
   spray.ws,
   // Apple push notifications

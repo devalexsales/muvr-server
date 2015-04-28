@@ -1,10 +1,10 @@
 package io.muvr
 
 import akka.actor.Props
-import spray.routing.{HttpServiceActor, Route}
+import spray.routing.{RouteConcatenation, HttpServiceActor, Route}
 
-object RootServiceActor {
-  def props(route: Route): Props = Props(classOf[RootServiceActor], route)
+object RootServiceActor extends RouteConcatenation {
+  def props(routes: Seq[Route]): Props = Props(classOf[RootServiceActor], routes.reduce(_ ~ _))
 }
 
 class RootServiceActor(route: Route) extends HttpServiceActor {
