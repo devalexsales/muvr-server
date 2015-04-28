@@ -13,18 +13,31 @@ import scala.concurrent.{ExecutionContext, Future}
 import scala.util.Try
 import scalaz.{-\/, \/, \/-}
 
+/**
+ * Common marshallers companion
+ */
 object CommonMarshallers {
 
+  /**
+   * Response option follows the standard ``Option[A]`` style
+   */
   private object ResponseOption {
     def apply[A](o: Option[A]): ResponseOption[A] = o match {
       case Some(v) ⇒ ResponseSome(v)
       case None    ⇒ ResponseNone
     }
   }
+
+  /**
+   * The option structure
+   * @tparam A the A
+   */
   sealed trait ResponseOption[+A]
+  /** None */
   case object ResponseNone extends ResponseOption[Nothing]
+  /** Some */
   case class ResponseSome[A](value: A) extends ResponseOption[A]
-  
+
 }
 
 trait CommonMarshallers extends MarshallingDirectives with MetaMarshallers {
@@ -33,7 +46,7 @@ trait CommonMarshallers extends MarshallingDirectives with MetaMarshallers {
   implicit class DisjunctUnionFuture(f: Future[_]) {
 
     def mapRight[B]: Future[\/[String, B]] = f.mapTo[\/[String, B]]
-    
+
     def mapNoneToEmpty[B](implicit ec: ExecutionContext): Future[ResponseOption[B]] = f.mapTo[Option[B]].map(ResponseOption.apply)
 
   }
@@ -75,7 +88,7 @@ trait CommonMarshallers extends MarshallingDirectives with MetaMarshallers {
   implicit object UuidJsonFormat extends RootJsonFormat[UUID] {
     def write(x: UUID) = JsString(x toString ())
     def read(value: JsValue) = value match {
-      case JsString(x) => UUID.fromString(x)
+      case JsString(x) ⇒ UUID.fromString(x)
     }
   }
 
@@ -90,19 +103,4 @@ trait CommonMarshallers extends MarshallingDirectives with MetaMarshallers {
     }
   }
 
-//  case object UUIDSerialiser extends CustomSerializer[UUID](format => (
-//    {
-//      case JString(s) => UUID.fromString(s)
-//      case JNull => null
-//    },
-//    {
-//      case x: UUID => JString(x.toString)
-//    }
-//    )
-//  )
-//
-//  override implicit def json4sFormats: Formats = new DefaultFormats {
-//      override def dateFormatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ")
-//    } + UUIDSerialiser
-//
 }
