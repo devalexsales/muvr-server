@@ -77,7 +77,7 @@ trait Muvr {
    */
   private def startupHttpService(transport: ActorRef, port: Int, routes: Route*)(implicit system: ActorSystem): Unit = {
     val api = system.actorOf(RootServiceActor.props(routes))
-    transport ! Http.Bind(api, interface = "", port = port)
+    transport ! Http.Bind(api, interface = "0.0.0.0", port = port)
   }
 
 }
