@@ -4,7 +4,7 @@ import Keys._
 object Dependencies {
 
   object akka {
-    val version = "2.3.10"
+    val version = "2.3.11"
     // Core Akka
     val actor                 = "com.typesafe.akka"      %% "akka-actor"                    % version
     val cluster               = "com.typesafe.akka"      %% "akka-cluster"                  % version
@@ -31,20 +31,20 @@ object Dependencies {
   }
 
   object scalaz {
-    val core = "org.scalaz" %% "scalaz-core" % "7.1.1"
+    val core = "org.scalaz" %% "scalaz-core" % "7.1.2"
   }
 
   object slf4j {
-    val version = "1.6.1"
+    val version = "1.7.12"
 
     val slf4j_simple     = "org.slf4j"              % "slf4j-simple" % version
     val slf4j_api        = "org.slf4j"              % "slf4j-api"    % version
   }
 
-  val typesafeConfig   = "com.typesafe"           % "config"        % "1.2.1"
+  val typesafeConfig   = "com.typesafe"           % "config"        % "1.3.0"
 
   // Apple push notifications
-  val apns             = "com.notnoop.apns"       % "apns"         % "0.2.3"
+  val apns             = "com.notnoop.apns"       % "apns"         % "1.0.0.Beta6"
  
   // Datastax Cassandra Client
   val cassandra_driver = "com.datastax.cassandra" % "cassandra-driver-core" % "2.1.5" exclude("io.netty", "netty")
