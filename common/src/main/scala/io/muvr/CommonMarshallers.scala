@@ -60,11 +60,12 @@ trait CommonMarshallers extends MarshallingDirectives with MetaMarshallers {
 
   }
 
+  private val dateFormat = new SimpleDateFormat("yyyy-MM-dd")
+
   implicit object DateFSOD extends FromStringOptionDeserializer[Date] {
-    val format = new SimpleDateFormat("yyyy-MM-dd")
 
     override def apply(v: Option[String]): Deserialized[Date] = {
-      v.map { s ⇒ Try { Right(format.parse(s)) }.getOrElse(Left(MalformedContent("Invalid date " + s))) } getOrElse Left(ContentExpected)
+      v.map { s ⇒ Try { Right(dateFormat.parse(s)) }.getOrElse(Left(MalformedContent("Invalid date " + s))) } getOrElse Left(ContentExpected)
     }
   }
 
@@ -106,8 +107,8 @@ trait CommonMarshallers extends MarshallingDirectives with MetaMarshallers {
   }
 
   implicit object UuidJsonFormat extends RootJsonFormat[UUID] {
-    def write(x: UUID) = JsString(x toString ())
-    def read(value: JsValue) = value match {
+    def write(obj: UUID) = JsString(obj.toString)
+    def read(json: JsValue) = (json: @unchecked) match {
       case JsString(x) ⇒ UUID.fromString(x)
     }
   }
@@ -118,9 +119,17 @@ trait CommonMarshallers extends MarshallingDirectives with MetaMarshallers {
 
   implicit object UserIdFormat extends RootJsonFormat[UserId] {
     override def write(obj: UserId): JsValue = JsString(obj.toString)
-    override def read(json: JsValue): UserId = json match {
+    override def read(json: JsValue): UserId = (json: @unchecked) match {
       case JsString(x) ⇒ UserId(x)
     }
+  }
+
+  implicit object DateFormat extends JsonFormat[Date] {
+    override def read(json: JsValue): Date = (json: @unchecked) match {
+      case JsString(v) ⇒ dateFormat.parse(v)
+    }
+
+    override def write(obj: Date): JsValue = JsString(dateFormat.format(obj))
   }
 
 }

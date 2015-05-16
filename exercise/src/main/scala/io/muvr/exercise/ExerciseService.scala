@@ -1,25 +1,57 @@
 package io.muvr.exercise
 
 import akka.actor.ActorRef
-import io.muvr.CommonMarshallers
+import io.muvr.{UserId, CommonPathDirectives, CommonMarshallers}
 import io.muvr.CommonMarshallers.UnmarshalledAndEntity
 import spray.http.HttpEntity
 import spray.httpx.SprayJsonSupport
-import spray.routing.Directives
+import spray.json._
+import spray.routing._
 
-private[exercise] object ExerciseService extends Directives with SprayJsonSupport with CommonMarshallers {
+private[exercise] object ExerciseService extends Directives with SprayJsonSupport with CommonMarshallers with CommonPathDirectives {
   import spray.json.DefaultJsonProtocol._
-
+  private val SessionIdValue: PathMatcher1[SessionId] = JavaUUID.map(SessionId.apply)
+  private implicit object SessionIdFormat extends RootJsonFormat[SessionId] {
+    override def write(obj: SessionId): JsValue = JsString(obj.toString)
+    override def read(json: JsValue): SessionId = (json: @unchecked) match {
+      case JsString(x) ⇒ SessionId(x)
+    }
+  }
+  private implicit val resistanceExerciseSessionProperties = jsonFormat(ResistanceExerciseSessionProperties, "muscleGroupIds", "intendedIntensity")
+  private implicit val resistanceExerciseSessionFormat = jsonFormat2(ResistanceExerciseSession)
   private implicit val resistanceExerciseFormat = jsonFormat5(ResistanceExercise)
   private implicit val resistanceExerciseSetFormat = jsonFormat1(ResistanceExerciseSet)
   private implicit val resistanceExerciseSetExampleFormat = jsonFormat3(ResistanceExerciseSetExample)
+  private implicit object ExercisePlanFormat extends JsonFormat[ExercisePlanItem] {
+    private val restFormat = jsonFormat3(io.muvr.exercise.Rest)
+    override def read(json: JsValue): ExercisePlanItem = json.asJsObject.getFields("kind", "value") match {
+      case Seq(JsString("rest"), rest) ⇒ restFormat.read(rest)
+      case Seq(JsString("resistance-exercise"), resistanceExercise) ⇒ resistanceExerciseFormat.read(resistanceExercise)
+      case x ⇒ throw new DeserializationException("Bad kind " + x)
+    }
+    override def write(obj: ExercisePlanItem): JsValue = obj match {
+      case r: Rest ⇒ restFormat.write(r)
+      case e: ResistanceExercise ⇒ resistanceExerciseFormat.write(e)
+      case x ⇒ throw new SerializationException("Unknown type " + x.getClass)
+    }
+  }
+  private implicit val exercisePlanDeviation = jsonFormat2(ExercisePlanDeviation)
+  private implicit val entireResistanceExerciseSessionFormat = jsonFormat5(EntireResistanceExerciseSession)
 
   def route(scaffolding: ActorRef) =
-    path("exercise" / Segment / Segment / "resistance") { (x, y) ⇒
+    path("exercise" / UserIdValue / "resistance" / "example") { (_) ⇒
       post {
         handleWith { uae: UnmarshalledAndEntity[ResistanceExerciseSetExample] ⇒
           scaffolding ! uae.entity.asString
           println(uae.unmarshalled)
+          "{}"
+        }
+      }
+    } ~
+    path("exercise" / UserIdValue / "resistance") { userId ⇒
+      post {
+        handleWith { ers: EntireResistanceExerciseSession ⇒
+          println(ers)
           "{}"
         }
       }

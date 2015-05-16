@@ -1,5 +1,7 @@
 package io.muvr.exercise
 
+import java.util.Date
+
 import spray.json.JsValue
 
 /**
@@ -17,7 +19,7 @@ import spray.json.JsValue
  */
 case class ResistanceExercise(exercise: String, confidence: Double,
                               repetitions: Option[Int], weight: Option[Double],
-                              intensity: Option[Double])
+                              intensity: Option[Double]) extends ExercisePlanItem
 
 /**
  * Exercise set contains several "sets" of exercise. In the simplest case,

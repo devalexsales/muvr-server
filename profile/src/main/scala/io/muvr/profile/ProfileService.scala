@@ -1,7 +1,5 @@
 package io.muvr.profile
 
-import java.util.UUID
-
 import akka.actor.ActorRef
 import io.muvr.{UserId, CommonPathDirectives, CommonMarshallers}
 import io.muvr.notification.NotificationProtocol.{AndroidDevice, IOSDevice}
@@ -10,7 +8,7 @@ import io.muvr.profile.UserProfileProtocol._
 import spray.http._
 import spray.httpx.SprayJsonSupport
 import spray.json.DefaultJsonProtocol
-import spray.routing.Directives
+import spray.routing._
 
 import scala.concurrent.ExecutionContext
 import scala.util.{Failure, Success}
