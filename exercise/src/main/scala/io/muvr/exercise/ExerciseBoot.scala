@@ -19,6 +19,6 @@ object ExerciseBoot {
       entryProps = Some(UserExerciseProcessor.props),
       idExtractor = UserExerciseProcessor.idExtractor,
       shardResolver = UserExerciseProcessor.shardResolver)
-    ExerciseBoot(null, scaffolding)
+    ExerciseBoot(exerciseProcessor, scaffolding)
   }
 }
