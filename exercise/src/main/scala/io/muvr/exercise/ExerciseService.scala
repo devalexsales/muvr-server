@@ -23,8 +23,7 @@ private[exercise] object ExerciseService extends Directives with SprayJsonSuppor
       case JsString(x) ⇒ SessionId(x)
     }
   }
-  private implicit val resistanceExerciseSessionProperties = jsonFormat(ResistanceExerciseSessionProperties, "muscleGroupIds", "intendedIntensity")
-  private implicit val resistanceExerciseSessionFormat = jsonFormat2(ResistanceExerciseSession)
+  private implicit val resistanceExerciseSessionFormat = jsonFormat4(ResistanceExerciseSession)
   private implicit val resistanceExerciseFormat = jsonFormat5(ResistanceExercise)
   private implicit val resistanceExerciseSetFormat = jsonFormat1(ResistanceExerciseSet)
   private implicit val resistanceExerciseSetExampleFormat = jsonFormat3(ResistanceExerciseSetExample)
