@@ -114,7 +114,8 @@ trait CommonMarshallers extends MarshallingDirectives with MetaMarshallers {
   }
 
   implicit object UnitToResponseMarshaller extends ToResponseMarshaller[Unit] {
-    override def apply(value: Unit, ctx: ToResponseMarshallingContext): Unit = ()
+    override def apply(value: Unit, ctx: ToResponseMarshallingContext): Unit =
+      ctx.marshalTo(HttpResponse(StatusCodes.OK, entity = HttpEntity(contentType = ContentTypes.`application/json`, string = "{}")))
   }
 
   implicit object UserIdFormat extends RootJsonFormat[UserId] {

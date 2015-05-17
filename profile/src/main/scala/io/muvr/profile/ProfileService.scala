@@ -45,7 +45,7 @@ private[profile] object ProfileService extends Directives with SprayJsonSupport 
       } ~
       post {
         handleWith { publicProfile: PublicProfile ⇒
-          (userProfileProcessor ? UserSetPublicProfile(userId, publicProfile)).mapRight[Unit]
+          userProfileProcessor ! UserSetPublicProfile(userId, publicProfile)
         }
       }
     } ~
