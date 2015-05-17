@@ -9,7 +9,6 @@ import akka.contrib.pattern.DistributedPubSubMediator.{Publish, Subscribe}
 import akka.persistence.{PersistentActor, SnapshotOffer}
 import io.muvr.UserId
 import io.muvr.notification.NotificationProtocol.Device
-import io.muvr.profile.UserProfile.{UserRegistered, UserDeviceSet}
 import io.muvr.profile.UserProfileProtocol._
 
 import scala.language.postfixOps

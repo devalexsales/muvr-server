@@ -8,6 +8,10 @@ import spray.httpx.SprayJsonSupport
 import spray.json._
 import spray.routing._
 
+/**
+ * REST API for the exercise service. Exposes endpoints that allow the clients to submit entire exercise sessions, to
+ * submit exercise examples
+ */
 private[exercise] object ExerciseService extends Directives with SprayJsonSupport with CommonMarshallers with CommonPathDirectives {
   import spray.json.DefaultJsonProtocol._
   private val SessionIdValue: PathMatcher1[SessionId] = JavaUUID.map(SessionId.apply)

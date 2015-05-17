@@ -1,9 +1,16 @@
 package io.muvr.profile
 
-import io.muvr.UserId
+import io.muvr.{UserMessage, UserId}
 
 object UserProfileProtocol {
   import io.muvr.notification.NotificationProtocol.{Device, Devices}
+
+  /**
+   * Registers a user
+   * @param userId the user to be added
+   * @param account the user account
+   */
+  case class UserRegistered(userId: UserId, account: Account) extends UserMessage
 
   /**
    * User's public profile
@@ -18,7 +25,7 @@ object UserProfileProtocol {
    * Get profile query for the given ``userId``
    * @param userId the user identity
    */
-  case class UserGetAccount(userId: UserId)
+  case class UserGetAccount(userId: UserId) extends UserMessage
 
   /**
    * The user account details
@@ -32,33 +39,40 @@ object UserProfileProtocol {
    * Get the public account for the given ``userId``
    * @param userId the user identity
    */
-  case class UserGetPublicProfile(userId: UserId)
+  case class UserGetPublicProfile(userId: UserId) extends UserMessage
 
   /**
    * Get the profile image for the given ``userId``
    * @param userId the user identity
    */
-  case class UserGetProfileImage(userId: UserId)
+  case class UserGetProfileImage(userId: UserId) extends UserMessage
 
   /**
    * Sets the public profile for the given ``userId``
    * @param userId the user identity
    * @param publicProfile the new public profile
    */
-  case class UserPublicProfileSet(userId: UserId, publicProfile: PublicProfile)
+  case class UserPublicProfileSet(userId: UserId, publicProfile: PublicProfile) extends UserMessage
 
   /**
    * Sets the profile image for the given ``userId``
    * @param userId the user identity
    * @param profileImage the new image
    */
-  case class UserProfileImageSet(userId: UserId, profileImage: Array[Byte])
+  case class UserProfileImageSet(userId: UserId, profileImage: Array[Byte]) extends UserMessage
 
   /**
    * Gets the user's devices
    * @param userId the user identity
    */
-  case class UserGetDevices(userId: UserId)
+  case class UserGetDevices(userId: UserId) extends UserMessage
+
+  /**
+   * Device has been set
+   * @param userId the user for the device
+   * @param device the device that has just been set
+   */
+  case class UserDeviceSet(userId: UserId, device: Device) extends UserMessage
 
   /**
    * The user profile includes the user's account and registered / known devices

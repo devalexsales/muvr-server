@@ -3,7 +3,7 @@ package io.muvr.profile
 import akka.actor.{ActorLogging, Props}
 import akka.contrib.pattern.ShardRegion
 import akka.persistence.{PersistentActor, SnapshotOffer}
-import io.muvr.{AutoPassivation, UserId}
+import io.muvr.{UserMessage, AutoPassivation, UserId}
 import io.muvr.notification.NotificationProtocol.{Device, Devices}
 
 object UserProfile {
@@ -23,35 +23,14 @@ object UserProfile {
   }
 
   val shardResolver: ShardRegion.ShardResolver = {
-    case UserRegistered(userId, _)       ⇒ s"${userId.hashCode() % 10}"
-    case UserGetAccount(userId)          ⇒ s"${userId.hashCode() % 10}"
-    case UserGetDevices(userId)          ⇒ s"${userId.hashCode() % 10}"
-    case UserDeviceSet(userId, _)        ⇒ s"${userId.hashCode() % 10}"
-    case UserGetPublicProfile(userId)    ⇒ s"${userId.hashCode() % 10}"
-    case UserPublicProfileSet(userId, _) ⇒ s"${userId.hashCode() % 10}"
-    case UserProfileImageSet(userId, _)  ⇒ s"${userId.hashCode() % 10}"
-    case UserGetProfileImage(userId)     ⇒ s"${userId.hashCode() % 10}"
+    case x: UserMessage ⇒ x.shardRegion()
   }
-
-  /**
-   * Registers a user
-   * @param userId the user to be added
-   * @param account the user account
-   */
-  case class UserRegistered(userId: UserId, account: Account)
 
   /**
    * Sets the user's device
    * @param device the device
    */
   case class DeviceSet(device: Device)
-
-  /**
-   * Device has been set
-   * @param userId the user for the device
-   * @param device the device that has just been set
-   */
-  case class UserDeviceSet(userId: UserId, device: Device)
 
   /**
    * Get account

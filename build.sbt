@@ -16,9 +16,12 @@ val longRunningTests = Seq(
 // Common code, but not protocols
 lazy val common = project.in(file("common"))
 
+// Exercise protocol
+lazy val exerciseProtocol = project.in(file("exercise-protocol")).dependsOn(common)
+
 // Exercise
 lazy val exercise = project.in(file("exercise"))
-  .dependsOn(notificationProtocol, profileProtocol, common)
+  .dependsOn(notificationProtocol, profileProtocol, exerciseProtocol, common)
   .configs(LongRunningTest, ShortRunningTest)
   .settings(inConfig(LongRunningTest)(Defaults.testTasks): _*)
   .settings(inConfig(ShortRunningTest)(Defaults.testTasks): _*)
