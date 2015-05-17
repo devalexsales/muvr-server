@@ -5,7 +5,7 @@ import akka.contrib.pattern.ClusterSharding
 
 import scala.concurrent.ExecutionContext
 
-case class ProfileBoot(userProfile: ActorRef, private val userProfileProcessor: ActorRef) {
+case class ProfileBoot private(userProfile: ActorRef, userProfileProcessor: ActorRef) {
   def route(implicit ec: ExecutionContext) = ProfileService.userProfileRoute(userProfile, userProfileProcessor)(ec)
 }
 

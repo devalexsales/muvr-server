@@ -6,7 +6,7 @@ import akka.actor.{ActorRef, ActorSystem}
  * Booted notification node, with a valid reference to the ``Notification`` actor
  * @param notification the ``Notification`` AR
  */
-case class NotificationBoot(notification: ActorRef)
+case class NotificationBoot private(notification: ActorRef)
 
 /**
  * Notification boot

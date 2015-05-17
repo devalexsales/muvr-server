@@ -1,12 +1,14 @@
 package io.muvr.exercise
 
 import akka.actor.ActorRef
-import io.muvr.{UserId, CommonPathDirectives, CommonMarshallers}
 import io.muvr.CommonMarshallers.UnmarshalledAndEntity
-import spray.http.HttpEntity
+import io.muvr.exercise.ExerciseProtocol.ExerciseSubmitEntireResistanceExerciseSession
+import io.muvr.{CommonMarshallers, CommonPathDirectives}
 import spray.httpx.SprayJsonSupport
 import spray.json._
 import spray.routing._
+
+import scala.concurrent.ExecutionContext
 
 /**
  * REST API for the exercise service. Exposes endpoints that allow the clients to submit entire exercise sessions, to
@@ -42,21 +44,22 @@ private[exercise] object ExerciseService extends Directives with SprayJsonSuppor
   private implicit val exercisePlanDeviation = jsonFormat2(ExercisePlanDeviation)
   private implicit val entireResistanceExerciseSessionFormat = jsonFormat5(EntireResistanceExerciseSession)
 
-  def route(scaffolding: ActorRef) =
+  import akka.pattern.ask
+  import io.muvr.Timeouts.defaults._
+
+  def route(exercise: ActorRef, scaffolding: ActorRef)(implicit ec: ExecutionContext) =
     path("exercise" / UserIdValue / "resistance" / "example") { (_) ⇒
       post {
         handleWith { uae: UnmarshalledAndEntity[ResistanceExerciseSetExample] ⇒
           scaffolding ! uae.entity.asString
           println(uae.unmarshalled)
-          "{}"
         }
       }
     } ~
     path("exercise" / UserIdValue / "resistance") { userId ⇒
       post {
-        handleWith { ers: EntireResistanceExerciseSession ⇒
-          println(ers)
-          "{}"
+        handleWith { eres: EntireResistanceExerciseSession ⇒
+          (exercise ? ExerciseSubmitEntireResistanceExerciseSession(userId, eres)).mapRight[SessionId]
         }
       }
     }

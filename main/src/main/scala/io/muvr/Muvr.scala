@@ -64,9 +64,9 @@ trait Muvr {
     val scaff = scaffolding(transport, system)
     val profile = ProfileBoot.boot
     val notification = NotificationBoot.boot
-    val exercise = ExerciseBoot.boot(notification.notification, profile.userProfile)
+    val exercise = ExerciseBoot.boot(notification.notification, profile.userProfile, scaff)
 
-    startupHttpService(transport, restPort, exercise.route(scaff), profile.route)
+    startupHttpService(transport, restPort, exercise.route, profile.route)
   }
 
   /**

@@ -1,7 +1,5 @@
 package io.muvr.exercise
 
-import java.util.Date
-
 import spray.json.JsValue
 
 /**
