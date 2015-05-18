@@ -1,7 +1,5 @@
 package io.muvr.exercise
 
-import spray.json.JsValue
-
 /**
  * Resistance exercise models a typical exercise a user performs against some weight.
  * At the very least, an RE holds some language-independent identifier of the exercise
@@ -51,4 +49,4 @@ case class ResistanceExerciseSet(sets: List[ResistanceExercise])
  */
 case class ResistanceExerciseSetExample(classified: List[ResistanceExerciseSet],
                                         correct: Option[ResistanceExerciseSet],
-                                        fusedSensorData: JsValue)
+                                        fusedSensorData: Seq[Seq[Int]])

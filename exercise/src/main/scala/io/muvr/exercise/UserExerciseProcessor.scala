@@ -1,10 +1,9 @@
 package io.muvr.exercise
 
-import akka.actor.{Props, Actor, ActorLogging}
-import akka.contrib.pattern.{ShardRegion, ClusterSharding}
+import akka.actor.{Actor, ActorLogging, Props}
+import akka.contrib.pattern.ShardRegion
 import akka.persistence.PersistentActor
-import io.muvr.exercise.ExerciseProtocol.ExerciseSubmitEntireResistanceExerciseSession
-import io.muvr.{UserMessage, UserId}
+import io.muvr.{UserId, UserMessage}
 
 import scalaz.\/
 
@@ -22,6 +21,14 @@ object UserExerciseProcessor {
   val shardResolver: ShardRegion.ShardResolver = {
     case x: UserMessage ⇒ x.shardRegion()
   }
+
+  /**
+   * Submit the entire resistance exercise session
+   *
+   * @param userId the user identity
+   * @param eres the entire session
+   */
+  case class ExerciseSubmitEntireResistanceExerciseSession(userId: UserId, eres: EntireResistanceExerciseSession) extends UserMessage
 
 }
 

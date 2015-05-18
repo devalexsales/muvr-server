@@ -2,7 +2,7 @@ package io.muvr.exercise
 
 import akka.actor.ActorRef
 import io.muvr.CommonMarshallers.UnmarshalledAndEntity
-import io.muvr.exercise.ExerciseProtocol.ExerciseSubmitEntireResistanceExerciseSession
+import io.muvr.exercise.UserExerciseProcessor.ExerciseSubmitEntireResistanceExerciseSession
 import io.muvr.{CommonMarshallers, CommonPathDirectives}
 import spray.httpx.SprayJsonSupport
 import spray.json._
