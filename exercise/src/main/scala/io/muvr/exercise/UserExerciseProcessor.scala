@@ -16,6 +16,7 @@ object UserExerciseProcessor {
 
   val idExtractor: ShardRegion.IdExtractor = {
     case ExerciseSubmitEntireResistanceExerciseSession(userId, eres) ⇒ (userId.toString, eres)
+    case Foo(userId)                                                 ⇒ (userId.toString, 'foo)
   }
 
   val shardResolver: ShardRegion.ShardResolver = {
@@ -30,6 +31,7 @@ object UserExerciseProcessor {
    */
   case class ExerciseSubmitEntireResistanceExerciseSession(userId: UserId, eres: EntireResistanceExerciseSession) extends UserMessage
 
+  case class Foo(userId: UserId) extends UserMessage
 }
 
 /**
@@ -43,7 +45,9 @@ class UserExerciseProcessor extends PersistentActor with ActorLogging {
   override val persistenceId: String = s"user-exercises-${userId.toString}"
 
   // no recovery behaviour just yet
-  override def receiveRecover: Receive = Actor.emptyBehavior
+  override def receiveRecover: Receive = {
+    case r: Rest ⇒ println(r)
+  }
 
   // only deal with sessions
   override def receiveCommand: Receive = {
@@ -51,6 +55,8 @@ class UserExerciseProcessor extends PersistentActor with ActorLogging {
       persist(eres) { _ ⇒
         sender() ! \/.right(id)
       }
+    case 'foo ⇒
+      persist(Rest(10, 20, 100)) { _ ⇒ }
   }
 
 }

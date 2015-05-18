@@ -2,7 +2,7 @@ package io.muvr.exercise
 
 import akka.actor.ActorRef
 import io.muvr.CommonMarshallers.UnmarshalledAndEntity
-import io.muvr.exercise.UserExerciseProcessor.ExerciseSubmitEntireResistanceExerciseSession
+import io.muvr.exercise.UserExerciseProcessor.{Foo, ExerciseSubmitEntireResistanceExerciseSession}
 import io.muvr.{CommonMarshallers, CommonPathDirectives}
 import spray.httpx.SprayJsonSupport
 import spray.json._
@@ -59,6 +59,13 @@ private[exercise] object ExerciseService extends Directives with SprayJsonSuppor
       post {
         handleWith { eres: EntireResistanceExerciseSession ⇒
           (exercise ? ExerciseSubmitEntireResistanceExerciseSession(userId, eres)).mapRight[SessionId]
+        }
+      }
+    } ~
+    path("exercise" / UserIdValue / "foo") { userId ⇒
+      get {
+        complete {
+          exercise ! Foo(userId)
         }
       }
     }
