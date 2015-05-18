@@ -12,6 +12,7 @@ libraryDependencies ++= Seq(
   akka.persistence,
   akka.persistence_cassandra,
   akka.leveldb,
+  akka.kryo,
   // Codec
   scalaz.core,
   // Spray
