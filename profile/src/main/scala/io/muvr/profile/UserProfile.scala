@@ -3,8 +3,8 @@ package io.muvr.profile
 import akka.actor.{ActorLogging, Props}
 import akka.contrib.pattern.ShardRegion
 import akka.persistence.{PersistentActor, SnapshotOffer}
-import io.muvr.{UserMessage, AutoPassivation, UserId}
 import io.muvr.notification.NotificationProtocol.{Device, Devices}
+import io.muvr.{AutoPassivation, UserMessage}
 
 object UserProfile {
   import io.muvr.profile.UserProfileProtocol._
@@ -59,6 +59,7 @@ object UserProfile {
 class UserProfile extends PersistentActor with ActorLogging with AutoPassivation {
   import io.muvr.profile.UserProfile._
   import io.muvr.profile.UserProfileProtocol._
+
   import scala.concurrent.duration._
 
   private var profile: Profile = _
