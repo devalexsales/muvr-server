@@ -13,9 +13,11 @@ object Dependencies {
     val persistence_cassandra = "com.github.krasserm"    %% "akka-persistence-cassandra"    % "0.3.7" intransitive()
 
     val leveldb               = "org.iq80.leveldb"        % "leveldb"                       % "0.7"
-    val kryo                  = "com.github.romix.akka"  %% "akka-kryo-serialization"       % "0.3.3"
 
     val testkit               = "com.typesafe.akka"      %% "akka-testkit"                  % version
+
+    // note that this should be "in sync" with Spark's Chill version
+    val chill            = "com.twitter"           %% "chill-akka"    % "0.5.0"
   }
 
   object spray {

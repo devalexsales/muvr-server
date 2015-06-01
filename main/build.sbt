@@ -23,6 +23,8 @@ libraryDependencies ++= Seq(
   // Apple push notifications
   apns,
   slf4j.slf4j_simple,
+  // Serialization
+  akka.chill,
   // Testing
   scalatest % "test",
   scalacheck % "test",
