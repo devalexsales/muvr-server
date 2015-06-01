@@ -1,14 +1,16 @@
 package io.muvr.tools
 
-import java.util.Date
+import java.util.{UUID, Date}
 
+import akka.actor.ActorSystem
 import io.muvr.exercise._
 
+import scala.concurrent.{Await, Future}
 import scala.util.Random
 
 object ERESGenerator extends ExerciseServiceMarshallers {
 
-  val defaultExercises = List(
+  private val defaultExercises = List(
     "arms" → List("dumbbell-bicep-curl", "straight-bar-biceps-curl", "rope-triceps-extension", "rope-biceps-curl", "alt-dumbbell-biceps-curl", "triceps-dips", "barbell-biceps-curl"),
     "chest" → List("dumbbell-chest-press", "dumbbell-chest-fly", "angle-chest-press", "cable-cross-overs"),
     "core" → List("side-dips", "twist", "pulldown-crunch"),
@@ -16,7 +18,7 @@ object ERESGenerator extends ExerciseServiceMarshallers {
     "shoulders" → List("dumbbell-press", "dumbbell-side-rise", "barbell-press", "dumbbell-front-rise")
   )
 
-  val defaultWeights = Map(
+  private val defaultWeights = Map(
     "arms" → 25,
     "chest" → 25,
     "core" → 25,
@@ -24,19 +26,19 @@ object ERESGenerator extends ExerciseServiceMarshallers {
     "shoulders" → 15
   )
 
-  def repetitionsGenerator(muscleGroupId: String)(intensity: Double, exercise: String): Int = {
+  private def repetitionsGenerator(muscleGroupId: String)(intensity: Double, exercise: String): Int = {
     (10 + (0.5 - intensity * 4)).toInt
   }
 
-  def weightGenerator(muscleGroupId: String)(intensity: Double, exercise: String): Option[Double] = {
+  private def weightGenerator(muscleGroupId: String)(intensity: Double, exercise: String): Option[Double] = {
     defaultWeights.get(muscleGroupId).map { w ⇒ w + (0.5 - intensity * w) }
   }
 
-  def intensityGenerator(muscleGroupId: String, intendedIntensity: Double): Double = {
+  private def intensityGenerator(muscleGroupId: String, intendedIntensity: Double): Double = {
     intendedIntensity + math.random * intendedIntensity / 5
   }
 
-  implicit class RichList[A](list: List[A]) {
+  private implicit class RichList[A](list: List[A]) {
 
     def random: A = {
       val i = Random.nextInt(list.size - 1)
@@ -44,7 +46,7 @@ object ERESGenerator extends ExerciseServiceMarshallers {
     }
   }
 
-  def generate(count: Int, each: ⇒ Int): List[EntireResistanceExerciseSession] = {
+  private def generate(count: Int, each: ⇒ Int): List[EntireResistanceExerciseSession] = {
     List.fill(count) {
       val (muscleGroupId, exercises) = defaultExercises.random
       val intendedIntensity = Random.nextDouble()
@@ -64,11 +66,22 @@ object ERESGenerator extends ExerciseServiceMarshallers {
   }
 
   def main(args: Array[String]): Unit = {
-    generate(1, Random.nextInt(10) + 5).foreach { x ⇒
+    import spray.http._
+    import spray.client.pipelining._
+    import scala.concurrent.duration._
+
+    implicit val system = ActorSystem()
+    import system.dispatcher // execution context for futures
+
+    val pipeline: HttpRequest => Future[HttpResponse] = sendReceive
+
+    generate(100, Random.nextInt(10) + 5).foreach { x ⇒
       val json = entireResistanceExerciseSessionFormat.write(x)
       println(json.prettyPrint)
+
+      val res = Await.result(pipeline(Post(s"http://localhost:12551/exercise/${UUID.randomUUID().toString}/resistance", x)), 10.seconds)
+      println(res)
     }
   }
-
 
 }
