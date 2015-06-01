@@ -3,7 +3,6 @@ package io.muvr.tools
 import java.util.Date
 
 import io.muvr.exercise._
-import spray.json.JsonWriter
 
 import scala.util.Random
 
