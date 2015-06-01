@@ -1,6 +1,6 @@
 package io.muvr.exercise
 
-import akka.actor.{Actor, ActorLogging, Props}
+import akka.actor.{ActorLogging, Props}
 import akka.contrib.pattern.ShardRegion
 import akka.persistence.PersistentActor
 import io.muvr.{UserId, UserMessage}
