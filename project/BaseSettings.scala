@@ -20,7 +20,7 @@ object BaseSettings extends sbtassembly.AssemblyKeys {
     graphSettings ++ 
     Seq(
       organization := "io.muvr",
-      scalaVersion := "2.10.5",
+      scalaVersion := "2.11.6",
       version := "1.0.0-SNAPSHOT",
       scalacOptions in Compile ++= Seq("-encoding", "UTF-8", "-target:jvm-1.7", "-deprecation", "-unchecked", "-Ywarn-dead-code", "-feature"),
       scalacOptions in (Compile, doc) <++= (name in (Compile, doc), version in (Compile, doc)) map DefaultOptions.scaladoc,
