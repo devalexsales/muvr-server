@@ -1,34 +1,75 @@
 package io.muvr.tools
 
-class ERESGenerator() {
+import java.util.Date
 
-  /*
-  {
-  "id":"968350C6-7765-4869-AC3C-B0FF5D31D7BD",
-  "session":{
-    "startDate":"2015-06-01T17:58:35+0000",
-    "muscleGroupIds":["arms"],
-    "intendedIntensity":0.8,
-    "title":"Demo 1"
-  },
-  "sets":[
-    {"sets":[{"exercise":"arms/dumbbell-bicep-curl", "confidence":1, "repetitions":10, "weight":20, "intensity":0.5}]},
-    {"sets":[{"exercise":"arms/cable-tricep-extension", "confidence":1, "repetitions":10, "weight":20, "intensity":0.5}]},
+import io.muvr.exercise._
+import spray.json.JsonWriter
 
-    {"sets":[{"exercise":"arms/dumbbell-bicep-curl", "confidence":1, "repetitions":10, "weight":22.5, "intensity":0.6}]},
-    {"sets":[{"exercise":"arms/cable-tricep-extension", "confidence":1, "repetitions":10, "weight":22.5, "intensity":0.5}]},
+import scala.util.Random
 
-    {"sets":[{"exercise":"arms/dumbbell-bicep-curl", "confidence":1, "repetitions":10, "weight":25, "intensity":0.7}]},
-    {"sets":[{"exercise":"arms/cable-tricep-extension", "confidence":1, "repetitions":10, "weight":25, "intensity":0.7}]},
+object ERESGenerator extends ExerciseServiceMarshallers {
 
-    {"sets":[{"exercise":"arms/dumbbell-bicep-curl", "confidence":1, "repetitions":7, "weight":27.5, "intensity":0.85}]},
-    {"sets":[{"exercise":"arms/cable-tricep-extension", "confidence":1, "repetitions":7, "weight":27.5, "intensity":0.85}]},
+  val defaultExercises = List(
+    "arms" → List("dumbbell-bicep-curl", "straight-bar-biceps-curl", "rope-triceps-extension", "rope-biceps-curl", "alt-dumbbell-biceps-curl", "triceps-dips", "barbell-biceps-curl"),
+    "chest" → List("dumbbell-chest-press", "dumbbell-chest-fly", "angle-chest-press", "cable-cross-overs"),
+    "core" → List("side-dips", "twist", "pulldown-crunch"),
+    "back" → List("cable-deltoid-cross-overs", "deltoid-row", "leverage-high-row", "lat-pulldown", "dumbbell-row"),
+    "shoulders" → List("dumbbell-press", "dumbbell-side-rise", "barbell-press", "dumbbell-front-rise")
+  )
 
-    {"sets":[{"exercise":"arms/dumbbell-bicep-curl", "confidence":1, "repetitions":3, "weight":30, "intensity":0.95}]},
-    {"sets":[{"exercise":"arms/cable-tricep-extension", "confidence":1, "repetitions":4, "weight":30, "intensity":0.95}]}
-  ],
-  "examples":[],
-  "deviations":[]
-}
-   */
+  val defaultWeights = Map(
+    "arms" → 25,
+    "chest" → 25,
+    "core" → 25,
+    "back" → 25,
+    "shoulders" → 15
+  )
+
+  def repetitionsGenerator(muscleGroupId: String)(intensity: Double, exercise: String): Int = {
+    (10 + (0.5 - intensity * 4)).toInt
+  }
+
+  def weightGenerator(muscleGroupId: String)(intensity: Double, exercise: String): Option[Double] = {
+    defaultWeights.get(muscleGroupId).map { w ⇒ w + (0.5 - intensity * w) }
+  }
+
+  def intensityGenerator(muscleGroupId: String, intendedIntensity: Double): Double = {
+    intendedIntensity + math.random * intendedIntensity / 5
+  }
+
+  implicit class RichList[A](list: List[A]) {
+
+    def random: A = {
+      val i = Random.nextInt(list.size - 1)
+      list(i)
+    }
+  }
+
+  def generate(count: Int, each: ⇒ Int): List[EntireResistanceExerciseSession] = {
+    List.fill(count) {
+      val (muscleGroupId, exercises) = defaultExercises.random
+      val intendedIntensity = Random.nextDouble()
+      val sets = List.fill(each) {
+        val exercise = exercises.random
+
+        val intensity = intensityGenerator(muscleGroupId, intendedIntensity)
+        val repetitions = repetitionsGenerator(muscleGroupId)(intensity, exercise)
+        val weight = weightGenerator(muscleGroupId)(intensity, exercise)
+
+        ResistanceExerciseSet(List(ResistanceExercise(exercise, 1, Some(repetitions), weight, Some(intensity))))
+      }
+
+      val session = ResistanceExerciseSession(new Date(), Seq(muscleGroupId), intendedIntensity, "Generated")
+      EntireResistanceExerciseSession(SessionId.randomId(), session, sets, Nil, Nil)
+    }
+  }
+
+  def main(args: Array[String]): Unit = {
+    generate(1, Random.nextInt(10) + 5).foreach { x ⇒
+      val json = entireResistanceExerciseSessionFormat.write(x)
+      println(json.prettyPrint)
+    }
+  }
+
+
 }
