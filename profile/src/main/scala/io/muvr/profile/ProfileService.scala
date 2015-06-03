@@ -13,16 +13,10 @@ import spray.routing._
 import scala.concurrent.ExecutionContext
 import scala.util.{Failure, Success}
 
-private[profile] object ProfileService extends Directives with SprayJsonSupport with CommonMarshallers with CommonPathDirectives {
+private[profile] object ProfileService extends Directives with ProfileMarshallers with CommonPathDirectives {
   import akka.pattern.ask
   import io.muvr.Timeouts.defaults._
   import DefaultJsonProtocol._
-
-  private implicit val userRegisterFormat = jsonFormat2(UserRegister)
-  private implicit val userLoginFormat = jsonFormat2(UserLogin)
-  private implicit val publicProfileFormat = jsonFormat4(PublicProfile)
-  private implicit val iosDeviceFormat = jsonFormat(IOSDevice, "deviceToken")
-  private implicit val androidDeviceFormat = jsonFormat0(AndroidDevice)
 
   def userProfileRoute(userProfile: ActorRef, userProfileProcessor: ActorRef)(implicit ec: ExecutionContext) =
     path("user") {

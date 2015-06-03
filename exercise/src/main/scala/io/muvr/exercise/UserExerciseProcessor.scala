@@ -42,7 +42,7 @@ class UserExerciseProcessor extends PersistentActor with ActorLogging {
   private val userId = UserId(self.path.name)
 
   // per-user actor
-  override val persistenceId: String = s"user-exercises-${userId.toString}"
+  override val persistenceId: String = UserExerciseProcessorPersistenceId(userId).persistenceId
 
   // no recovery behaviour just yet
   override def receiveRecover: Receive = {

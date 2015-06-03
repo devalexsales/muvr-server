@@ -1,14 +1,17 @@
 package io.muvr.tools
 
-import java.util.{UUID, Date}
+import java.util.Date
 
 import akka.actor.ActorSystem
+import io.muvr.UserId
 import io.muvr.exercise._
+import io.muvr.profile.ProfileMarshallers
+import io.muvr.profile.UserProfileProcessor.UserRegister
 
 import scala.concurrent.{Await, Future}
 import scala.util.Random
 
-object ERESGenerator extends ExerciseServiceMarshallers {
+object ERESGenerator extends ExerciseServiceMarshallers with ProfileMarshallers {
 
   private val defaultExercises = List(
     "arms" → List("dumbbell-bicep-curl", "straight-bar-biceps-curl", "rope-triceps-extension", "rope-biceps-curl", "alt-dumbbell-biceps-curl", "triceps-dips", "barbell-biceps-curl"),
@@ -66,22 +69,28 @@ object ERESGenerator extends ExerciseServiceMarshallers {
   }
 
   def main(args: Array[String]): Unit = {
-    import spray.http._
     import spray.client.pipelining._
+    import spray.http._
+
     import scala.concurrent.duration._
 
     implicit val system = ActorSystem()
     import system.dispatcher // execution context for futures
 
     val pipeline: HttpRequest => Future[HttpResponse] = sendReceive
+    val userRegistrationPipeline = pipeline ~> unmarshal[UserId]
+    val userId = Await.result(userRegistrationPipeline(Post("http://localhost:12551/user", UserRegister(Random.nextString(20), "letmein"))), 10.seconds)
+    val count = 100
 
-    generate(100, Random.nextInt(10) + 5).foreach { x ⇒
+    generate(count, Random.nextInt(10) + 5).foreach { x ⇒
       val json = entireResistanceExerciseSessionFormat.write(x)
       println(json.prettyPrint)
 
-      val res = Await.result(pipeline(Post(s"http://localhost:12551/exercise/${UUID.randomUUID().toString}/resistance", x)), 10.seconds)
+      val res = Await.result(pipeline(Post(s"http://localhost:12551/exercise/$userId/resistance", x)), 10.seconds)
       println(res)
     }
+
+    println(s"** Registered $userId and submitted $count sessions.")
   }
 
 }

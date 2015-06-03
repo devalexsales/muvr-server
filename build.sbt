@@ -13,11 +13,14 @@ val longRunningTests = Seq(
   "io.muvr.exercise.classifiers.model.provers.CVC4Test"
 )
 
+// Common protocol code
+lazy val commonProtocol = project.in(file("common-protocol"))
+
 // Common code, but not protocols
-lazy val common = project.in(file("common"))
+lazy val common = project.in(file("common")).dependsOn(commonProtocol)
 
 // Exercise protocol
-lazy val exerciseProtocol = project.in(file("exercise-protocol")).dependsOn(common)
+lazy val exerciseProtocol = project.in(file("exercise-protocol")).dependsOn(common, commonProtocol)
 
 // Exercise
 lazy val exercise = project.in(file("exercise"))
