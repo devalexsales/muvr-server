@@ -1,6 +1,6 @@
 package io.muvr.exercise
 
-import io.muvr.{CommonPathDirectives, CommonMarshallers}
+import io.muvr.{CommonMarshallers, CommonPathDirectives}
 import spray.httpx.SprayJsonSupport
 import spray.json._
 import spray.routing._

@@ -9,8 +9,7 @@ lazy val ShortRunningTest = config("short") extend Test
 
 // List of tests that require extra running time (used by CI to stage testing runs)
 val longRunningTests = Seq(
-  "io.muvr.exercise.classifiers.model.ExerciseModelTest",
-  "io.muvr.exercise.classifiers.model.provers.CVC4Test"
+  "io.muvr.exercise.SomeTest"
 )
 
 // Common protocol code
@@ -19,12 +18,15 @@ lazy val commonProtocol = project.in(file("common-protocol"))
 // Common code, but not protocols
 lazy val common = project.in(file("common")).dependsOn(commonProtocol)
 
-// Exercise protocol
+// Exercise protocol 
 lazy val exerciseProtocol = project.in(file("exercise-protocol")).dependsOn(common, commonProtocol)
+
+// Exercise protocol marshallers
+lazy val exerciseProtocolMarshalling = project.in(file("exercise-protocol-marshalling")).dependsOn(common, commonProtocol, exerciseProtocol)
 
 // Exercise
 lazy val exercise = project.in(file("exercise"))
-  .dependsOn(notificationProtocol, profileProtocol, exerciseProtocol, common)
+  .dependsOn(notificationProtocol, profileProtocol, exerciseProtocol, exerciseProtocolMarshalling, common)
   .configs(LongRunningTest, ShortRunningTest)
   .settings(inConfig(LongRunningTest)(Defaults.testTasks): _*)
   .settings(inConfig(ShortRunningTest)(Defaults.testTasks): _*)
