@@ -14,7 +14,7 @@ import scala.util.Try
 
 trait CommonProtocolMarshallers extends MarshallingDirectives with MetaMarshallers {
 
-  private val dateFormat = new SimpleDateFormat("yyyy-MM-dd")
+  val dateFormat = new SimpleDateFormat("yyyy-MM-dd")
 
   implicit object DateFSOD extends FromStringOptionDeserializer[Date] {
 
