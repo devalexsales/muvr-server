@@ -16,7 +16,7 @@ object UserExerciseProcessor {
 
   val idExtractor: ShardRegion.IdExtractor = {
     case ExerciseSubmitEntireResistanceExerciseSession(userId, eres) ⇒ (userId.toString, eres)
-    case Foo(userId)                                                 ⇒ (userId.toString, 'foo)
+    case ExerciseSubmitSuggestions(userId, suggestions)              ⇒ (userId.toString, suggestions)
   }
 
   val shardResolver: ShardRegion.ShardResolver = {
@@ -31,7 +31,12 @@ object UserExerciseProcessor {
    */
   case class ExerciseSubmitEntireResistanceExerciseSession(userId: UserId, eres: EntireResistanceExerciseSession) extends UserMessage
 
-  case class Foo(userId: UserId) extends UserMessage
+  /**
+   * Submit exercise suggestions
+   * @param userId the user identity
+   * @param suggestions the suggestions
+   */
+  case class ExerciseSubmitSuggestions(userId: UserId, suggestions: Suggestions) extends UserMessage
 }
 
 /**
@@ -55,8 +60,8 @@ class UserExerciseProcessor extends PersistentActor with ActorLogging {
       persist(eres) { _ ⇒
         sender() ! \/.right(id)
       }
-    case 'foo ⇒
-      persist(Rest(10, 20, 100)) { _ ⇒ }
+    case suggestions ⇒
+      println(s"Got $suggestions")
   }
 
 }

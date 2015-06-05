@@ -1,8 +1,8 @@
 package io.muvr.exercise
 
 import akka.actor.ActorRef
-import io.muvr.exercise.UserExerciseProcessor.{ExerciseSubmitEntireResistanceExerciseSession, Foo}
-import io.muvr.{CommonMarshallers, CommonPathDirectives}
+import io.muvr.exercise.UserExerciseProcessor.{ExerciseSubmitEntireResistanceExerciseSession, ExerciseSubmitSuggestions}
+import io.muvr.{UserId, CommonMarshallers, CommonPathDirectives}
 import spray.routing._
 
 import scala.concurrent.ExecutionContext
@@ -32,10 +32,10 @@ private[exercise] object ExerciseService extends Directives with ExerciseProtoco
         }
       }
     } ~
-    path("exercise" / UserIdValue / "foo") { userId ⇒
-      get {
-        complete {
-          exercise ! Foo(userId)
+    path("exercise" / UserIdValue / "suggestions") { userId: UserId ⇒
+      post {
+        handleWith { suggestions: Suggestions ⇒
+          exercise ! ExerciseSubmitSuggestions(userId, suggestions)
         }
       }
     }

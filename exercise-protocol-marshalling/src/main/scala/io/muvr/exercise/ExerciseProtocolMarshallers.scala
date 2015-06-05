@@ -80,9 +80,13 @@ trait ExerciseProtocolMarshallers extends SprayJsonSupport with CommonProtocolMa
         JsObject("kind" → intensity, "value" → intensityFormat.write(i))
     }: _*)
 
-    override def read(json: JsValue): Suggestions = json.asJsObject.getFields("kind", "value") match {
-      case Seq(`session`, JsArray(s))   ⇒ Suggestions(s.map(sessionFormat.read).toList)
-      case Seq(`intensity`, JsArray(i)) ⇒ Suggestions(i.map(intensityFormat.read).toList)
+    override def read(json: JsValue): Suggestions = json match {
+      case JsArray(elements) ⇒ Suggestions(elements.map { element ⇒
+        element.asJsObject.getFields("kind", "value") match {
+          case Seq(`session`, s)   ⇒ sessionFormat.read(s)
+          case Seq(`intensity`, i) ⇒ intensityFormat.read(i)
+        }
+      }.toList)
     }
   }
 
