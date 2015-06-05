@@ -1,11 +1,11 @@
 package io.muvr.exercise
 
-import io.muvr.{CommonMarshallers, CommonPathDirectives}
+import io.muvr.{CommonProtocolMarshallers, CommonPathDirectives}
 import spray.httpx.SprayJsonSupport
 import spray.json._
 import spray.routing._
 
-trait ExerciseServiceMarshallers extends SprayJsonSupport with CommonMarshallers with CommonPathDirectives {
+trait ExerciseProtocolMarshallers extends SprayJsonSupport with CommonProtocolMarshallers with CommonPathDirectives {
   import spray.json.DefaultJsonProtocol._
   val SessionIdValue: PathMatcher1[SessionId] = JavaUUID.map(SessionId.apply)
   implicit object SessionIdFormat extends RootJsonFormat[SessionId] {

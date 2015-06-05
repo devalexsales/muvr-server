@@ -1,6 +1,6 @@
 package io.muvr
 
-import spray.routing._
+import spray.routing.PathMatcher1
 import spray.routing.directives.PathDirectives
 
 trait CommonPathDirectives extends PathDirectives {

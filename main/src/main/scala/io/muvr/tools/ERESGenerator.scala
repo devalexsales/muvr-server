@@ -11,7 +11,7 @@ import io.muvr.profile.UserProfileProcessor.UserRegister
 import scala.concurrent.{Await, Future}
 import scala.util.Random
 
-object ERESGenerator extends ExerciseServiceMarshallers with ProfileMarshallers {
+object ERESGenerator extends ExerciseProtocolMarshallers with ProfileMarshallers {
 
   private val defaultExercises = List(
     "arms" → List("dumbbell-bicep-curl", "straight-bar-biceps-curl", "rope-triceps-extension", "rope-biceps-curl", "alt-dumbbell-biceps-curl", "triceps-dips", "barbell-biceps-curl"),

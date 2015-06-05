@@ -15,6 +15,9 @@ val longRunningTests = Seq(
 // Common protocol code
 lazy val commonProtocol = project.in(file("common-protocol"))
 
+// Common protocol marshalling
+lazy val commonProtocolMarshalling = project.in(file("common-protocol-marshalling")).dependsOn(commonProtocol)
+
 // Common code, but not protocols
 lazy val common = project.in(file("common")).dependsOn(commonProtocol)
 
@@ -22,11 +25,11 @@ lazy val common = project.in(file("common")).dependsOn(commonProtocol)
 lazy val exerciseProtocol = project.in(file("exercise-protocol")).dependsOn(common, commonProtocol)
 
 // Exercise protocol marshallers
-lazy val exerciseProtocolMarshalling = project.in(file("exercise-protocol-marshalling")).dependsOn(common, commonProtocol, exerciseProtocol)
+lazy val exerciseProtocolMarshalling = project.in(file("exercise-protocol-marshalling")).dependsOn(common, commonProtocol, exerciseProtocol, commonProtocolMarshalling)
 
 // Exercise
 lazy val exercise = project.in(file("exercise"))
-  .dependsOn(notificationProtocol, profileProtocol, exerciseProtocol, exerciseProtocolMarshalling, common)
+  .dependsOn(notificationProtocol, profileProtocol, exerciseProtocol, exerciseProtocolMarshalling,commonProtocolMarshalling, common)
   .configs(LongRunningTest, ShortRunningTest)
   .settings(inConfig(LongRunningTest)(Defaults.testTasks): _*)
   .settings(inConfig(ShortRunningTest)(Defaults.testTasks): _*)
@@ -36,7 +39,7 @@ lazy val exercise = project.in(file("exercise"))
   )
 
 // User profiles
-lazy val profile = project.in(file("profile")).dependsOn(profileProtocol, common)
+lazy val profile = project.in(file("profile")).dependsOn(profileProtocol, common, commonProtocolMarshalling)
 lazy val profileProtocol = project.in(file("profile-protocol")).dependsOn(common, notificationProtocol)
 
 // Notifications

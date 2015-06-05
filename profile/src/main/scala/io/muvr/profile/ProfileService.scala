@@ -1,22 +1,19 @@
 package io.muvr.profile
 
 import akka.actor.ActorRef
-import io.muvr.{UserId, CommonPathDirectives, CommonMarshallers}
 import io.muvr.notification.NotificationProtocol.{AndroidDevice, IOSDevice}
 import io.muvr.profile.UserProfileProcessor._
 import io.muvr.profile.UserProfileProtocol._
+import io.muvr.{CommonMarshallers, CommonPathDirectives, UserId}
 import spray.http._
-import spray.httpx.SprayJsonSupport
-import spray.json.DefaultJsonProtocol
 import spray.routing._
 
 import scala.concurrent.ExecutionContext
 import scala.util.{Failure, Success}
 
-private[profile] object ProfileService extends Directives with ProfileMarshallers with CommonPathDirectives {
+private[profile] object ProfileService extends Directives with ProfileMarshallers with CommonPathDirectives with CommonMarshallers {
   import akka.pattern.ask
   import io.muvr.Timeouts.defaults._
-  import DefaultJsonProtocol._
 
   def userProfileRoute(userProfile: ActorRef, userProfileProcessor: ActorRef)(implicit ec: ExecutionContext) =
     path("user") {
