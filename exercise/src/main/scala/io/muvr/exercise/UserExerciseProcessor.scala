@@ -60,7 +60,8 @@ class UserExerciseProcessor extends PersistentActor with ActorLogging {
       persist(eres) { _ ⇒
         sender() ! \/.right(id)
       }
-    case suggestions ⇒
+      
+    case Suggestions(suggestions) ⇒
       println(s"Got $suggestions")
   }
 
