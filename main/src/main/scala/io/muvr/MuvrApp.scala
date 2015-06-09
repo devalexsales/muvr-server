@@ -1,15 +1,14 @@
 package io.muvr
 
-import collection.JavaConversions._
 import akka.actor._
-import akka.persistence.journal.leveldb.{SharedLeveldbJournal, SharedLeveldbStore}
 import com.typesafe.config.ConfigFactory
+
+import scala.collection.JavaConversions._
 
 /**
  * CLI application for the exercise app
  */
 object MuvrApp extends App with Muvr with ProxyScaffolding {
-  private var store: Option[ActorRef] = None
 
   lazy val config = {
     val role = "muvr-monolith"
