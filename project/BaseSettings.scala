@@ -17,17 +17,18 @@ object BaseSettings extends sbtassembly.AssemblyKeys {
    * Common project settings
    */
   val baseSettings: Seq[Def.Setting[_]] =
-    graphSettings ++ 
+    graphSettings ++
     Seq(
       organization := "io.muvr",
-      scalaVersion := "2.11.6",
+      scalaVersion := "2.11.7",
       version := "1.0.0-SNAPSHOT",
-      scalacOptions in Compile ++= Seq("-encoding", "UTF-8", "-target:jvm-1.7", "-deprecation", "-unchecked", "-Ywarn-dead-code", "-feature"),
+      scalacOptions in Compile ++= Seq("-encoding", "UTF-8", "-target:jvm-1.8", "-Ybackend:GenBCode", "-Ydelambdafy:method", "-deprecation", "-unchecked", "-Ywarn-dead-code", "-feature"),
       scalacOptions in (Compile, doc) <++= (name in (Compile, doc), version in (Compile, doc)) map DefaultOptions.scaladoc,
-      javacOptions in (Compile, compile) ++= Seq("-source", "1.7", "-target", "1.7", "-Xlint:unchecked", "-Xlint:deprecation", "-Xlint:-options"),
+      javacOptions in (Compile, compile) ++= Seq("-source", "1.8", "-target", "1.8", "-Xlint:unchecked", "-Xlint:deprecation", "-Xlint:-options"),
       javacOptions in doc := Seq(),
       javaOptions += "-Xmx2G",
       outputStrategy := Some(StdoutOutput),
+      libraryDependencies += "org.scala-lang.modules" %% "scala-java8-compat" % "0.5.0",
       // for One-JAR
       exportJars := true,
       // this will be required for monitoring until Akka monitoring SPI comes in
@@ -56,7 +57,7 @@ object BaseSettings extends sbtassembly.AssemblyKeys {
           val oldStrategy = (assemblyMergeStrategy in assembly).value
           oldStrategy(x)
       }
-    ) 
+    )
 
   val projectSettings: Seq[Def.Setting[_]] =
     Seq(
