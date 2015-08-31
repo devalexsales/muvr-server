@@ -57,6 +57,7 @@ class UserExerciseProcessor extends PersistentActor with ActorLogging {
   // only deal with sessions
   override def receiveCommand: Receive = {
     case eres@EntireResistanceExerciseSession(id, session, sets, examples, deviations) ⇒
+      println(eres)
       persist(eres) { _ ⇒
         sender() ! \/.right(id)
       }
