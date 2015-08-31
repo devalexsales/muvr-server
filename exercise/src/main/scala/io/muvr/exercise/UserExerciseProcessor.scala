@@ -51,6 +51,7 @@ class UserExerciseProcessor extends PersistentActor with ActorLogging {
 
   // no recovery behaviour just yet
   override def receiveRecover: Receive = {
+    case x ⇒ println(x)
     case r: Rest ⇒ println(r)
   }
 
