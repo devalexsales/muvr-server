@@ -18,6 +18,20 @@ trait ExerciseProtocolMarshallers extends SprayJsonSupport with CommonProtocolMa
   implicit val resistanceExerciseSessionFormat = jsonFormat4(ResistanceExerciseSession)
   implicit val resistanceExerciseFormat = jsonFormat5(ResistanceExercise)
   implicit val resistanceExerciseSetFormat = jsonFormat1(ResistanceExerciseSet)
+  implicit object SensorDataFormat extends JsonFormat[SensorData] {
+    private val threedFormat = jsonFormat3(Threed)
+
+    override def write(obj: SensorData): JsValue = obj match {
+      case Oned(value) ⇒ JsNumber(value)
+      case x: Threed ⇒ threedFormat.write(x)
+    }
+
+    override def read(json: JsValue): SensorData = json match {
+      case JsNumber(value) ⇒ Oned(value.intValue())
+      case _ ⇒ threedFormat.read(json)
+    }
+  }
+  implicit val fusedSensorDataFormat = jsonFormat5(FusedSensorData)
   implicit val resistanceExerciseSetExampleFormat = jsonFormat3(ResistanceExerciseSetExample)
   implicit object ExercisePlanFormat extends JsonFormat[ExercisePlanItem] {
     private val restFormat = jsonFormat3(io.muvr.exercise.Rest)
@@ -80,7 +94,7 @@ trait ExerciseProtocolMarshallers extends SprayJsonSupport with CommonProtocolMa
         JsObject("kind" → intensity, "value" → intensityFormat.write(i))
     }: _*)
 
-    override def read(json: JsValue): Suggestions = json match {
+    override def read(json: JsValue): Suggestions = (json: @unchecked) match {
       case JsArray(elements) ⇒ Suggestions(elements.map { element ⇒
         element.asJsObject.getFields("kind", "value") match {
           case Seq(`session`, s)   ⇒ sessionFormat.read(s)

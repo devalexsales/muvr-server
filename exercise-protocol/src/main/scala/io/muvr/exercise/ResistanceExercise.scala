@@ -37,6 +37,37 @@ case class ResistanceExercise(exercise: String, confidence: Double,
 case class ResistanceExerciseSet(sets: List[ResistanceExercise])
 
 /**
+ * Sensor data ADT
+ */
+sealed trait SensorData
+
+/**
+ * Three dimensional value
+ *
+ * @param x the x
+ * @param y the y
+ * @param z the z
+ */
+case class Threed(x: Int, y: Int, z: Int) extends SensorData
+
+/**
+ * One dimensional value
+ * @param value the value
+ */
+case class Oned(value: Int) extends SensorData
+
+/**
+ * Fused sensor data format from the given device recording at sampling rate
+ *
+ * @param deviceId the device identity
+ * @param samplesPerSecond the samples per second
+ * @param sensorType the sensor type
+ * @param sensorLocation the sensor location
+ * @param data the sensory data
+ */
+case class FusedSensorData(deviceId: Int, samplesPerSecond: Int, sensorType: Int, sensorLocation: Int, data: Seq[SensorData])
+
+/**
  * Resistance exercise set example that the app submits to provide positive or negative
  * examples. We say that the system "got it right" if ``Some(classified.head) == correct``.
  * Naturally, if ``classified`` is empty, then the app got it wrong; if ``correct`` is
@@ -49,4 +80,4 @@ case class ResistanceExerciseSet(sets: List[ResistanceExercise])
  */
 case class ResistanceExerciseSetExample(classified: List[ResistanceExerciseSet],
                                         correct: Option[ResistanceExerciseSet],
-                                        fusedSensorData: Seq[Seq[Int]])
+                                        fusedSensorData: List[FusedSensorData])
