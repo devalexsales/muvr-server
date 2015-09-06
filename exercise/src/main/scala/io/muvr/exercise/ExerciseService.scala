@@ -19,7 +19,7 @@ private[exercise] object ExerciseService extends Directives with ExerciseProtoco
   def route(exercise: ActorRef, scaffolding: ActorRef)(implicit ec: ExecutionContext) =
     path("exercise" / UserIdValue / "resistance" / "example") { (_) ⇒
       post {
-        handleWith { uae: UnmarshalledAndEntity[ResistanceExerciseSetExample] ⇒
+        handleWith { uae: UnmarshalledAndEntity[ResistanceExerciseExample] ⇒
           scaffolding ! uae.entity.asString
           println(uae.unmarshalled)
         }

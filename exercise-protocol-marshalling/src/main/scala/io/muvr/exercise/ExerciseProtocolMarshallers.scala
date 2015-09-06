@@ -15,9 +15,10 @@ trait ExerciseProtocolMarshallers extends SprayJsonSupport with CommonProtocolMa
       case JsString(x) ⇒ SessionId(x)
     }
   }
+  implicit val exerciseModelFormat = jsonFormat3(ExerciseModel)
   implicit val resistanceExerciseSessionFormat = jsonFormat4(ResistanceExerciseSession)
-  implicit val resistanceExerciseFormat = jsonFormat5(ResistanceExercise)
-  implicit val resistanceExerciseSetFormat = jsonFormat1(ResistanceExerciseSet)
+  implicit val resistanceExerciseFormat = jsonFormat1(ResistanceExercise)
+  implicit val classifiedResistanceExerciseFormat = jsonFormat5(ClassifiedResistanceExercise)
   implicit object SensorDataFormat extends JsonFormat[SensorData] {
     private val threedFormat = jsonFormat3(Threed)
 
@@ -32,22 +33,8 @@ trait ExerciseProtocolMarshallers extends SprayJsonSupport with CommonProtocolMa
     }
   }
   implicit val fusedSensorDataFormat = jsonFormat5(FusedSensorData)
-  implicit val resistanceExerciseSetExampleFormat = jsonFormat3(ResistanceExerciseSetExample)
-  implicit object ExercisePlanFormat extends JsonFormat[ExercisePlanItem] {
-    private val restFormat = jsonFormat3(io.muvr.exercise.Rest)
-    override def read(json: JsValue): ExercisePlanItem = json.asJsObject.getFields("kind", "value") match {
-      case Seq(JsString("rest"), rest) ⇒ restFormat.read(rest)
-      case Seq(JsString("resistance-exercise"), resistanceExercise) ⇒ resistanceExerciseFormat.read(resistanceExercise)
-      case x ⇒ throw new DeserializationException("Bad kind " + x)
-    }
-    override def write(obj: ExercisePlanItem): JsValue = obj match {
-      case r: Rest ⇒ restFormat.write(r)
-      case e: ResistanceExercise ⇒ resistanceExerciseFormat.write(e)
-      case x ⇒ throw new SerializationException("Unknown type " + x.getClass)
-    }
-  }
-  implicit val exercisePlanDeviation = jsonFormat2(ExercisePlanDeviation)
-  implicit val entireResistanceExerciseSessionFormat = jsonFormat5(EntireResistanceExerciseSession)
+  implicit val resistanceExerciseSetExampleFormat = jsonFormat3(ResistanceExerciseExample)
+  implicit val entireResistanceExerciseSessionFormat = jsonFormat3(EntireResistanceExerciseSession)
 
   /**
    * Marshalling of Spark suggestions
