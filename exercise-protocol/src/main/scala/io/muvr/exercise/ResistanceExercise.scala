@@ -7,15 +7,22 @@ package io.muvr.exercise
  * a good idea for the ``exercise`` to uniquely refer to an item in some taxonomy of
  * exercises, which will enable much better analysis.
  *
- * @param exercise the exercise identifier
+ * @param id the exercise identifier
+ */
+case class ResistanceExercise(id: String)
+
+/**
+ * The result of classifying RE
+ *
+ * @param resistanceExercise the classified resistance exercise
  * @param confidence the classification confidence
  * @param repetitions the number of repetitions
  * @param weight the weight being used
  * @param intensity the intensity
  */
-case class ResistanceExercise(exercise: String, confidence: Double,
-                              repetitions: Option[Int], weight: Option[Double],
-                              intensity: Option[Double]) extends ExercisePlanItem
+case class ClassifiedResistanceExercise(resistanceExercise: ResistanceExercise, confidence: Double,
+                                        repetitions: Option[Int], weight: Option[Double],
+                                        intensity: Option[Double])
 
 /**
  * Sensor data ADT
@@ -59,6 +66,6 @@ case class FusedSensorData(deviceId: Int, samplesPerSecond: Int, sensorType: Int
  * @param correct the correct classification
  * @param fusedSensorData the exported data used for the classification
  */
-case class ResistanceExerciseExample(classified: List[ResistanceExercise],
-                                        correct: Option[ResistanceExercise],
+case class ResistanceExerciseExample(classified: List[ClassifiedResistanceExercise],
+                                        correct: Option[ClassifiedResistanceExercise],
                                         fusedSensorData: List[FusedSensorData])

@@ -2,16 +2,15 @@ package io.muvr.exercise
 
 import java.util.Date
 
-
 /**
  * The resistance exercise session
  *
  * @param startDate the start date and time
- * @param muscleGroupIds the targeted muscle groups
+ * @param exerciseModel the exercise model
  * @param intendedIntensity the targeted intensity
  * @param title the optional title
  */
-case class ResistanceExerciseSession(startDate: Date, muscleGroupIds: Seq[String],
+case class ResistanceExerciseSession(startDate: Date, exerciseModel: ExerciseModel,
                                      intendedIntensity: Double,
                                       title: String)
 
