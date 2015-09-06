@@ -17,7 +17,6 @@ trait ExerciseProtocolMarshallers extends SprayJsonSupport with CommonProtocolMa
   }
   implicit val resistanceExerciseSessionFormat = jsonFormat4(ResistanceExerciseSession)
   implicit val resistanceExerciseFormat = jsonFormat5(ResistanceExercise)
-  implicit val resistanceExerciseSetFormat = jsonFormat1(ResistanceExerciseSet)
   implicit object SensorDataFormat extends JsonFormat[SensorData] {
     private val threedFormat = jsonFormat3(Threed)
 
@@ -32,7 +31,7 @@ trait ExerciseProtocolMarshallers extends SprayJsonSupport with CommonProtocolMa
     }
   }
   implicit val fusedSensorDataFormat = jsonFormat5(FusedSensorData)
-  implicit val resistanceExerciseSetExampleFormat = jsonFormat3(ResistanceExerciseSetExample)
+  implicit val resistanceExerciseSetExampleFormat = jsonFormat3(ResistanceExerciseExample)
   implicit object ExercisePlanFormat extends JsonFormat[ExercisePlanItem] {
     private val restFormat = jsonFormat3(io.muvr.exercise.Rest)
     override def read(json: JsValue): ExercisePlanItem = json.asJsObject.getFields("kind", "value") match {
@@ -47,7 +46,7 @@ trait ExerciseProtocolMarshallers extends SprayJsonSupport with CommonProtocolMa
     }
   }
   implicit val exercisePlanDeviation = jsonFormat2(ExercisePlanDeviation)
-  implicit val entireResistanceExerciseSessionFormat = jsonFormat5(EntireResistanceExerciseSession)
+  implicit val entireResistanceExerciseSessionFormat = jsonFormat3(EntireResistanceExerciseSession)
 
   /**
    * Marshalling of Spark suggestions

@@ -25,12 +25,8 @@ case class ResistanceExerciseSession(startDate: Date, muscleGroupIds: Seq[String
  *
  * @param id the session identity established on the mobile.
  * @param session the session descriptor
- * @param sets the completed exercise sets
  * @param examples the classification examples
- * @param deviations the deviations from the exercise plan
  */
 case class EntireResistanceExerciseSession(id: SessionId,
                                             session: ResistanceExerciseSession,
-                                            sets: List[ResistanceExerciseSet],
-                                            examples: List[ResistanceExerciseSetExample],
-                                            deviations: List[ExercisePlanDeviation])
+                                            examples: List[ResistanceExerciseExample])
