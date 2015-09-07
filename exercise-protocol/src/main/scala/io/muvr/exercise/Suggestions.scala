@@ -47,19 +47,19 @@ object Suggestion {
    * Suggests exercising
    * @param date the date
    * @param source the source
-   * @param muscleGroupKeys the target muscle groups
+   * @param exerciseModel the exercise model
    * @param intensity the intensity
    */
-  case class Session(date: Date, source: SuggestionSource, muscleGroupKeys: Seq[MuscleGroupKey], intensity: ExerciseIntensity) extends Suggestion
+  case class Session(date: Date, source: SuggestionSource, exerciseModel: ExerciseModel, intensity: ExerciseIntensity) extends Suggestion
 
   /**
    * Suggest intensity for the given muscle group key
    * @param date the date
    * @param source the source
-   * @param muscleGroupKey the target muscle group
+   * @param exerciseModel the exercise model
    * @param intensity the intensity
    */
-  case class Intensity(date: Date, source: SuggestionSource, muscleGroupKey: MuscleGroupKey, intensity: ExerciseIntensity) extends Suggestion
+  case class Intensity(date: Date, source: SuggestionSource, exerciseModel: ExerciseModel, intensity: ExerciseIntensity) extends Suggestion
 
 }
 
