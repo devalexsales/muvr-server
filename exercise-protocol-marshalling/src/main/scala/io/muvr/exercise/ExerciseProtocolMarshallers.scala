@@ -18,7 +18,7 @@ trait ExerciseProtocolMarshallers extends SprayJsonSupport with CommonProtocolMa
   implicit val exerciseModelFormat = jsonFormat3(ExerciseModel)
   implicit val resistanceExerciseSessionFormat = jsonFormat4(ResistanceExerciseSession)
   implicit val resistanceExerciseFormat = jsonFormat1(ResistanceExercise)
-  implicit val classifiedResistanceExerciseFormat = jsonFormat5(ClassifiedResistanceExercise)
+  implicit val classifiedResistanceExerciseFormat = jsonFormat6(ClassifiedResistanceExercise)
   implicit object SensorDataFormat extends JsonFormat[SensorData] {
     private val threedFormat = jsonFormat3(Threed)
 

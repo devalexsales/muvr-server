@@ -19,10 +19,11 @@ case class ResistanceExercise(id: String)
  * @param repetitions the number of repetitions
  * @param weight the weight being used
  * @param intensity the intensity
+ * @param time the time in seconds that the exercise set took
  */
 case class ClassifiedResistanceExercise(resistanceExercise: ResistanceExercise, confidence: Double,
                                         repetitions: Option[Int], weight: Option[Double],
-                                        intensity: Option[Double])
+                                        time: Option[Int], intensity: Option[Double])
 
 /**
  * Sensor data ADT
