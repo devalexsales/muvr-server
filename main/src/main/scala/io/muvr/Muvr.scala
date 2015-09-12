@@ -7,7 +7,6 @@ import io.muvr.exercise.ExerciseBoot
 import io.muvr.notification.NotificationBoot
 import io.muvr.profile.ProfileBoot
 import spray.can.Http
-import spray.can.server.UHttp
 import spray.routing.Route
 
 /**
@@ -55,7 +54,7 @@ trait Muvr {
     implicit val system = ActorSystem("Muvr", finalConfig)
     import system.dispatcher
 
-    val transport = IO(UHttp)
+    val transport = IO(Http)
 
     // Startup the journal - typically this is only used when running locally with a levelDB journal
     journalStartUp(system)

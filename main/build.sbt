@@ -19,7 +19,6 @@ libraryDependencies ++= Seq(
   spray.can,
   spray.client,
   spray.json,
-  spray.ws,
   // Apple push notifications
   apns,
   slf4j.slf4j_simple,
